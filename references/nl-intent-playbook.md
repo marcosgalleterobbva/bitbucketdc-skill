@@ -14,6 +14,7 @@ Use this playbook to map user requests into concrete `bbdc` commands.
 |---|---|---|
 | "list open PRs" / "show incoming PRs" | `<bbdc-cmd> pr list -p <PROJECT> -r <REPO> --state OPEN --direction INCOMING --json` | `project`, `repo` |
 | "show my account info" / "who am I in bitbucket" | `<bbdc-cmd> account me` | none |
+| "show my dashboard pull requests" / "show PRs where I'm involved" | `<bbdc-cmd> dashboard pull-requests --json` | none |
 | "show my recently accessed repos" | `<bbdc-cmd> account recent-repos --json` | none |
 | "show my ssh keys" | `<bbdc-cmd> account ssh-keys --json` | none |
 | "show my gpg keys" | `<bbdc-cmd> account gpg-keys --json` | none |
@@ -43,16 +44,14 @@ Use this playbook to map user requests into concrete `bbdc` commands.
 - If a request is ambiguous between single and batch, ask whether to run one PR or many.
 - If high-risk (merge/rebase/decline/delete or batch mutating), confirm intent before generating commands.
 
-## Codex Runtime Model (BBVA)
-- Never execute `bbdc` in Codex.
-- Always provide exact commands for the user to run locally.
-- Ask for pasted output (JSON or terminal output).
-- Resume analysis/next commands from the user-provided output.
+## Codex Runtime Model
+- `generic`: prefer executing `bbdc` in Codex when available. If the user asks not to run commands, provide exact commands for the user to run locally and request pasted output.
+- `bbva`: never execute `bbdc` in Codex. Always provide exact commands for the user to run locally, ask for pasted output (JSON or terminal output), and resume analysis/next commands from the user-provided output.
 
 ## Safe Defaults
 - Prefer read-only commands when the request can be satisfied without mutation.
 - Omit `--version` unless the user explicitly provides it; CLI auto-fetches when supported.
 - For exploratory queries, include `--limit` and `--max-items` to constrain results.
-- For BBVA account introspection, prefer `account me` because it can return partial results and explicit `errors`.
+- In `bbva` mode, prefer `account me` for account introspection because it can return partial results and explicit `errors`.
 - Never append `--json` to `account me`; it already returns JSON and has no `--json` flag.
-- If output shows `HTTP 401` on account endpoints, explain HTTP access token scope limits vs PAT.
+- In `bbva` mode, if output shows `HTTP 401` on account endpoints, explain HTTP access token scope limits vs PAT.

@@ -12,6 +12,7 @@ Source: `bbdc_cli/__main__.py`
 | account | `account settings` | `account_settings` | `--user-slug` |
 | account | `account ssh-keys` | `account_ssh_keys` | `--user, --limit, --max-items, --json` |
 | account | `account user` | `account_user` | `--user-slug` |
+| dashboard | `dashboard pull-requests` | `dashboard_pull_requests` | `--user, --state, --role, --participant-status, --order, --closed-since, --limit, --max-items, --json` |
 | pr | `pr activities` | `pr_activities` | `--project/-p*, --repo/-r*, <pr_id>*, --from-id, --from-type, --limit, --max-items, --json` |
 | pr | `pr approve` | `pr_approve` | `--project/-p*, --repo/-r*, <pr_id>*` |
 | pr | `pr changes` | `pr_changes` | `--project/-p*, --repo/-r*, <pr_id>*, --change-scope, --since-id, --until-id, --with-comments/--no-with-comments, --limit, --max-items, --json` |

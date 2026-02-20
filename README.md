@@ -40,14 +40,17 @@ Option guardrail:
 ## Validate setup
 After install, from Codex ask:
 - "Use bbdc-cli to list open PRs in project X repo Y."
+- "Use bbdc-cli to show my dashboard pull requests."
 - "Use bbdc-cli to show my authenticated account info."
 
 Skill should return mapped commands such as `bbdc pr ...` or `bbdc account ...` for the user to run locally.
 
-## Known Codex limitation
-For this BBVA setup, assume Codex runtimes cannot execute `bbdc` reliably against Bitbucket due to network constraints.
+## Mode-specific Codex execution
+In `bbva` mode, assume Codex runtimes cannot execute `bbdc` reliably against Bitbucket due to network constraints.
 
-Expected skill behavior:
+Expected skill behavior in `bbva` mode:
 1. Never execute `bbdc` in Codex.
 2. Provide exact `bbdc` commands for the user to run in their terminal.
 3. Continue once the user shares command output.
+
+In `generic` mode, prefer executing `bbdc` in Codex when available. If the user explicitly asks not to run commands, provide command-only guidance.

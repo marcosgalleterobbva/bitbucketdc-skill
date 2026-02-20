@@ -70,17 +70,20 @@ User profile/settings retrieval (`account user`, `account settings`, optional in
 4. `BITBUCKET_USER`
 
 ## Codex runtime behavior
-For this BBVA deployment, Codex agent runtimes should be treated as unable to execute `bbdc` against Bitbucket.
+In `bbva` mode, Codex agent runtimes should be treated as unable to execute `bbdc` against Bitbucket.
+In `generic` mode, prefer executing `bbdc` in Codex when available unless the user asks not to run commands.
 
 Typical failure signature:
 - `Request failed: HTTPSConnectionPool(... NameResolutionError ... Failed to resolve ...)`
 
-Recommended handling in the skill:
+Recommended handling in `bbva` mode:
 - Never execute `bbdc` in Codex.
 - Always provide command-only guidance and ask the user to run commands locally.
 - Continue once command output is provided by the user.
 
-When user output includes `HTTP 401` on account endpoints:
+In `generic` mode, if the user asks not to run commands, provide command-only guidance and wait for output.
+
+When user output includes `HTTP 401` on account endpoints in `bbva` mode:
 - Explain that Project/Repository HTTP access tokens have narrower scope than PAT for user-account data.
 - Treat this as expected token-scope behavior.
 

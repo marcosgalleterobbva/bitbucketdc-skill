@@ -10,14 +10,19 @@ Use this skill to translate natural-language Bitbucket Data Center requests into
 
 Prefer this skill for pull request lifecycle work, authenticated account lookups, participants/reviewers, comments/blockers, rebase/merge checks, and batch PR workflows.
 
+## Mode Selection
+- Switch to BBVA mode only when the user's request includes a line `Mode: bbva`.
+- If the request is ambiguous and the mode affects execution, ask a single clarifying question.
+
 ## Quick Start
 1. Resolve the executable:
    - Prefer `bbdc` if present in `PATH`.
    - Fallback to `python -m bbdc_cli`.
-2. Execution model for BBVA infrastructure:
-   - Never execute `bbdc` from Codex.
-   - Always provide commands for the user to run in their own terminal.
-3. Choose mode:
+2. Determine the mode (see Mode Selection).
+3. Execution model dependent on mode:
+   - `generic`: prefer executing `bbdc` in Codex when available. If the user explicitly asks not to run commands, provide commands for the user to run.
+   - `bbva`: never execute `bbdc` in Codex; always provide commands for the user to run locally.
+4. Choose operation style:
    - Read-only inspection: use list/get/diff/activities style commands.
    - Mutating operation: create/update/review/merge/rebase/delete with confirmation-sensitive handling.
 
@@ -43,7 +48,7 @@ Prefer this skill for pull request lifecycle work, authenticated account lookups
 ## Execution Rules
 - Always require `BITBUCKET_SERVER` and `BITBUCKET_API_TOKEN`.
 - Require `BITBUCKET_SERVER` to end with `/rest`.
-- Never execute `bbdc` in Codex for this BBVA deployment.
+- Execution is mode-specific: `generic` should prefer executing `bbdc` locally when available unless the user asks not to run commands; `bbva` must never execute `bbdc` in Codex and must return commands for the user to run.
 - Prefer `--json` only when that exact command shows `--json` in `references/generated-command-inventory.md`.
 - Never infer `--json` from command-family patterns.
 - `account me` does not support `--json`; always use `account me` as-is.
@@ -51,12 +56,9 @@ Prefer this skill for pull request lifecycle work, authenticated account lookups
 - For mutating operations, describe the command and expected effect before user execution.
 - Treat `merge`, `rebase`, `decline`, and `delete` as high-risk operations.
 - Treat `pr batch ...` mutating commands as high-risk operations.
-- Return command-only guidance:
-  - Exact command(s) to run.
-  - Expected output fields to copy back.
-  - A short next-step command for verification.
-- If an account command returns `HTTP 401`, explain that BBVA users typically authenticate with
-  Project/Repository HTTP access tokens (not PAT), and those tokens may not access user-account endpoints.
+- In `bbva` mode, return command-only guidance: exact command(s) to run, expected output fields to copy back, and a short next-step command for verification.
+- In `generic` mode, prefer running commands when available; fall back to command-only guidance when execution is not possible or the user asked not to run commands.
+- In `bbva` mode, if an account command returns `HTTP 401`, explain that BBVA users typically authenticate with Project/Repository HTTP access tokens (not PAT), and those tokens may not access user-account endpoints.
 
 ## Command Routing
 Use `references/command-map.md` for grouped commands and examples.
@@ -102,6 +104,8 @@ python scripts/generate_command_inventory.py \
   - `<bbdc-cmd> pr batch approve -p <PROJECT> -r <REPO> -f <FILE.json>`
 - Account snapshot:
   - `<bbdc-cmd> account me`
+- Dashboard pull requests:
+  - `<bbdc-cmd> dashboard pull-requests --json`
 - Account SSH keys:
   - `<bbdc-cmd> account ssh-keys --json`
 - Account GPG keys:
@@ -122,7 +126,7 @@ Use `references/source-behavior.md` for:
 - endpoints implemented through `request_rest`,
 - error semantics returned by the CLI.
 
-BBVA Codex-runtime network limitation pattern:
+In `bbva` mode, Codex-runtime network limitation pattern:
 - `Request failed: HTTPSConnectionPool(... NameResolutionError ... Failed to resolve ...)`
 
 When this happens:
@@ -130,7 +134,7 @@ When this happens:
 2. Provide exact `bbdc` commands for the user to run locally.
 3. Continue once the user shares command output.
 
-HTTP 401 for account endpoints:
+In `bbva` mode, HTTP 401 for account endpoints:
 - Treat as expected with BBVA HTTP access tokens.
 - Tell the user this is token-scope behavior (not necessarily a wrong token).
 - Prefer `account me` so partial results + `errors` can still be analyzed.

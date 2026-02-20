@@ -19,11 +19,12 @@ Recommended startup check:
 - User-local terminal: `<bbdc-cmd> doctor`
 
 Codex runtime note:
-- Do not execute `bbdc` in Codex for this BBVA deployment.
-- Always provide commands for the user to run locally.
+- In `bbva` mode, do not execute `bbdc` in Codex; always provide commands for the user to run locally.
+- In `generic` mode, prefer executing `bbdc` in Codex when available unless the user asks not to run commands.
 
 ## Top-level commands
 - `doctor`
+- `dashboard pull-requests`
 - `account ...`
 - `pr ...`
 
@@ -35,6 +36,9 @@ Codex runtime note:
 - `account settings`
 - `account me`
 - `account me` has no `--json` flag (it already outputs JSON)
+
+## Dashboard commands
+- `dashboard pull-requests`
 
 BBVA token scope note:
 - Project/Repository HTTP access tokens may return `401` for some account commands.
