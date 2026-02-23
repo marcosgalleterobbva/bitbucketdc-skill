@@ -19,6 +19,8 @@ Recommended startup check:
 - User-local terminal: `<bbdc-cmd> doctor`
 
 Codex runtime note:
+- Default mode is `generic`.
+- Use `bbva` mode only when explicitly requested (for example `Mode: bbva`) or when user-level guidance sets it as default.
 - In `bbva` mode, do not execute `bbdc` in Codex; always provide commands for the user to run locally.
 - In `generic` mode, prefer executing `bbdc` in Codex when available unless the user asks not to run commands.
 

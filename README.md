@@ -46,7 +46,9 @@ After install, from Codex ask:
 Skill should return mapped commands such as `bbdc pr ...` or `bbdc account ...` for the user to run locally.
 
 ## Mode-specific Codex execution
-In `bbva` mode, assume Codex runtimes cannot execute `bbdc` reliably against Bitbucket due to network constraints.
+Default mode is `generic`.
+
+Use `bbva` mode only when explicitly requested (for example `Mode: bbva`) or when user-level guidance (for example `~/.codex/AGENTS.md`) sets BBVA as default. In `bbva` mode, assume Codex runtimes cannot execute `bbdc` reliably against Bitbucket due to network constraints.
 
 Expected skill behavior in `bbva` mode:
 1. Never execute `bbdc` in Codex.

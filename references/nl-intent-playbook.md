@@ -45,6 +45,8 @@ Use this playbook to map user requests into concrete `bbdc` commands.
 - If high-risk (merge/rebase/decline/delete or batch mutating), confirm intent before generating commands.
 
 ## Codex Runtime Model
+- Default mode is `generic`.
+- Use `bbva` mode only when explicitly requested (for example `Mode: bbva`) or when user-level guidance sets it as default.
 - `generic`: prefer executing `bbdc` in Codex when available. If the user asks not to run commands, provide exact commands for the user to run locally and request pasted output.
 - `bbva`: never execute `bbdc` in Codex. Always provide exact commands for the user to run locally, ask for pasted output (JSON or terminal output), and resume analysis/next commands from the user-provided output.
 

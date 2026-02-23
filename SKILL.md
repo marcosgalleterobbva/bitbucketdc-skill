@@ -11,8 +11,10 @@ Use this skill to translate natural-language Bitbucket Data Center requests into
 Prefer this skill for pull request lifecycle work, authenticated account lookups, participants/reviewers, comments/blockers, rebase/merge checks, and batch PR workflows.
 
 ## Mode Selection
-- Switch to BBVA mode only when the user's request includes a line `Mode: bbva`.
-- If the request is ambiguous and the mode affects execution, ask a single clarifying question.
+- Default mode is `generic`.
+- Use `bbva` mode only when the user explicitly provides `Mode: bbva` or when user-level guidance (for example `~/.codex/AGENTS.md`) sets BBVA as the default.
+- If the user explicitly provides `Mode: generic`, use `generic` mode.
+- If instructions conflict and the mode affects execution, ask a single clarifying question.
 
 ## Quick Start
 1. Resolve the executable:

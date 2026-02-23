@@ -70,6 +70,10 @@ User profile/settings retrieval (`account user`, `account settings`, optional in
 4. `BITBUCKET_USER`
 
 ## Codex runtime behavior
+Default mode is `generic`.
+
+Use `bbva` mode only when explicitly requested (for example `Mode: bbva`) or when user-level guidance sets it as default.
+
 In `bbva` mode, Codex agent runtimes should be treated as unable to execute `bbdc` against Bitbucket.
 In `generic` mode, prefer executing `bbdc` in Codex when available unless the user asks not to run commands.
 
